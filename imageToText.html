@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js"></script>
+  </head>
+  <body>
+    <input type="file" id="imageInput" />
+    <button onclick="processImage()">Read Text</button>
+    <div id="output"></div>
+    <script>
+      function processImage() {
+        console.log("here")
+        const fileInput = document.getElementById("imageInput");
+        const outputDiv = document.getElementById("output");
+
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        console.log(file)
+
+        reader.onload = function (event) {
+          const imageData = event.target.result;
+
+          Tesseract.recognize(imageData, 'urd')
+            .then(function (result) {
+              const text = result.data.text;
+              console.log("text", text)
+              console.log("text", text.split(" "))
+              console.log("text", text.split(" ").length)
+              outputDiv.innerText = text;
+            })
+            .catch(function (error) {
+              console.error(error);
+            });
+        };
+
+        reader.readAsDataURL(file);
+      }
+    </script>
+  </body>
+</html>
